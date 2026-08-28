@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriGest — @yield('titre', 'Gestion des parcelles')</title>
+    <title>AgriGest — <?php echo $__env->yieldContent('titre', 'Gestion des parcelles'); ?></title>
     <style>
         :root {
             --vert: #2f7d32;
@@ -109,11 +109,12 @@
 <body>
 
     <main>
-        @if (session('succes'))
-            <div class="succes">{{ session('succes') }}</div>
-        @endif
+        <?php if(session('succes')): ?>
+            <div class="succes"><?php echo e(session('succes')); ?></div>
+        <?php endif; ?>
 
-        @yield('contenu')
+        <?php echo $__env->yieldContent('contenu'); ?>
     </main>
 </body>
 </html>
+<?php /**PATH C:\Users\hp\Desktop\AgriGest\resources\views/layouts/app.blade.php ENDPATH**/ ?>

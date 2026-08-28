@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Parcelle extends Model
 {
@@ -34,14 +35,22 @@ class Parcelle extends Model
     public static function statuts(): array
     {
         return [
-            'active' => 'Active',
-            'en_repos' => 'En repos',
-            'recoltee' => 'Récoltée',
+            'en culture' => 'En culture',
+            'récoltée' => 'Récoltée',
+            'en jachère' => 'En jachère',
         ];
     }
 
     public function statutLibelle(): string
     {
         return self::statuts()[$this->statut] ?? $this->statut;
+    }
+
+    /**
+     * Classe CSS valide pour le badge du statut (Slug sans accents).
+     */
+    public function statutBadge(): string
+    {
+        return Str::slug($this->statut);
     }
 }

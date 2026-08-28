@@ -25,7 +25,7 @@ class ParcelleRequest extends FormRequest
             'culture' => ['required', 'string', 'max:255'],
             'superficie' => ['required', 'numeric', 'min:0.01'],
             'date_plantation' => ['required', 'date', 'before_or_equal:today'],
-            'statut' => ['required', 'in:active,en_repos,recoltee'],
+            'statut' => ['required', 'in:en culture,récoltée,en jachère'],
         ];
     }
 

@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <th>Statut</th>
-            <td><span class="badge badge-{{ $parcelle->statut }}">{{ $parcelle->statutLibelle() }}</span></td>
+            <td><span class="badge badge-{{ $parcelle->statutBadge() }}">{{ $parcelle->statutLibelle() }}</span></td>
         </tr>
     </table>
 

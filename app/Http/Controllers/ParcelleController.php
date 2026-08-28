@@ -4,17 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ParcelleRequest;
 use App\Models\Parcelle;
+use Illuminate\Http\Request;
 
 class ParcelleController extends Controller
 {
     /**
-     * US5 — Afficher la liste de toutes les parcelles.
+     * US5 — Afficher la liste des parcelles (avec recherche et filtre par statut).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $parcelles = Parcelle::orderBy('nom')->paginate(10);
+        $q = $request->query('q');
+        $statut = $request->query('statut');
 
-        return view('parcelles.index', compact('parcelles'));
+        $parcelles = Parcelle::query()
+            ->when($q, fn ($query) => $query->where(function ($sous) use ($q) {
+                $recherche = '%' . mb_strtolower($q) . '%';
+
+                $sous->whereRaw('LOWER(nom) LIKE ?', [$recherche])
+                    ->orWhereRaw('LOWER(culture) LIKE ?', [$recherche]);
+            }))
+            ->when($statut, fn ($query) => $query->where('statut', $statut))
+            ->orderBy('nom')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('parcelles.index', compact('parcelles', 'q', 'statut'));
     }
 
     /**

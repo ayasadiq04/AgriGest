@@ -8,8 +8,28 @@
         <a href="{{ route('parcelles.create') }}" class="btn btn-primary">+ Ajouter une parcelle</a>
     </div>
 
+    <form action="{{ route('parcelles.index') }}" method="GET"
+          style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap; align-items:center;">
+        <input type="text" name="q" value="{{ $q ?? '' }}"
+               placeholder="Rechercher par nom ou culture..." style="flex:1; min-width:200px;">
+        <select name="statut" style="min-width:150px;">
+            <option value="">Tous</option>
+            @foreach (App\Models\Parcelle::statuts() as $valeur => $libelle)
+                <option value="{{ $valeur }}" @selected(($statut ?? '') === $valeur)>{{ $libelle }}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+        @if ($q !== null || $statut !== null)
+            <a href="{{ route('parcelles.index') }}" class="btn btn-secondary">Réinitialiser</a>
+        @endif
+    </form>
+
     @if ($parcelles->isEmpty())
-        <p>Aucune parcelle enregistrée pour le moment.</p>
+        @if ($q !== null || $statut !== null)
+            <p>Aucune parcelle trouvée.</p>
+        @else
+            <p>Aucune parcelle enregistrée pour le moment.</p>
+        @endif
     @else
         <table>
             <thead>
@@ -28,7 +48,7 @@
                         <td>{{ $parcelle->culture }}</td>
                         <td>{{ $parcelle->superficie }}</td>
                         <td>
-                            <span class="badge badge-{{ $parcelle->statut }}">
+                            <span class="badge badge-{{ $parcelle->statutBadge() }}">
                                 {{ $parcelle->statutLibelle() }}
                             </span>
                         </td>
